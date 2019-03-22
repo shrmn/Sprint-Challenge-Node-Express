@@ -1,9 +1,12 @@
 import React from 'react';
 
-export default () => {
+const Project = (props) => {
   return (
     <div>
-
+      <h3>{props.name}</h3>
+      <p>{props.description}</p>
     </div>
   )
 };
+
+export default Project;

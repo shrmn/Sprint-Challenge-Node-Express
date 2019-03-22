@@ -4,9 +4,13 @@ import Project from './Project';
 export default (props) => {
   return (
     <div>
-      {this.props.projects.map(project = {
-        return(
-          <Project />
+      {props.projects.map(project => {
+        return (
+          <Project
+            key={project.id}
+            name={project.name}
+            description={project.description}
+          />
         )
       })}
     </div>
