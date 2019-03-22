@@ -3,6 +3,7 @@ const pModel = require('../data/helpers/projectModel.js');
 
 const router = express.Router();
 
+//get all projects
 router.get('/', async (req, res) => {
   try {
     const projects = await pModel.get();
@@ -13,6 +14,7 @@ router.get('/', async (req, res) => {
   }
 });
 
+//get project by id
 router.get('/:id', async (req, res) => {
   try {
     const id = req.params.id;
@@ -25,8 +27,10 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+//post new project
 router.post('/', async (req, res) => {
   const { name, description } = req.body;
+  console.log(req.body);
   if (!name || !description) {
     req
       .status(400)
@@ -42,6 +46,54 @@ router.post('/', async (req, res) => {
   }
 });
 
+//update project
+router.put('/:id', async (req, res) => {
+  const id = req.params.id;
+  const changes = req.body;
+  const { name, description } = changes;
 
+  if (!name || !description) {
+    req.status(400).json({ message: `Bad request. Both a name and description are required.` });
+  }
+  try {
+    const updatedProj = await pModel.update(id, changes);
+    res
+      .status(200)
+      .json({ message: `Project was successfully updated`, updatedProj });
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: `Error occurred while updating project: ${error}` });
+  }
+});
+
+//delete project
+router.delete('/:1d', async (res, req) => {
+  const id = req.params.id;
+  try {
+    const postToDelete = await pModel.get(id);
+    if (!postMessage) {
+      res
+        .status(404)
+        .json({ message: `Project doesn't exist` });
+    } else {
+      const deletedPost = await pModel.remove(id);
+      if (deletedPost) {
+        res
+          .status(200)
+          .status(deletedPost);
+      }
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: `Error occurred while deleting post: ${error}` });
+  }
+});
+
+//get project actions
+router.get('/:id/actions', async (req, res) => {
+  const id = req.params.id;
+})
 
 module.exports = router;
