@@ -68,21 +68,19 @@ router.put('/:id', async (req, res) => {
 });
 
 //delete project
-router.delete('/:1d', async (res, req) => {
+router.delete('/:id', async (req, res) => {
   const id = req.params.id;
   try {
     const postToDelete = await pModel.get(id);
-    if (!postMessage) {
+    if (!postToDelete) {
       res
         .status(404)
         .json({ message: `Project doesn't exist` });
     } else {
       const deletedPost = await pModel.remove(id);
-      if (deletedPost) {
-        res
-          .status(200)
-          .status(deletedPost);
-      }
+      res
+        .status(200)
+        .json(deletedPost);
     }
   } catch (error) {
     res
@@ -94,6 +92,16 @@ router.delete('/:1d', async (res, req) => {
 //get project actions
 router.get('/:id/actions', async (req, res) => {
   const id = req.params.id;
+  try {
+    const actions = await pModel.getProjectActions(id);
+    res
+      .status(200)
+      .json(actions);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: `Error occurred while retrieving actions: ${error}` })
+  }
 })
 
 module.exports = router;
